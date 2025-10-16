@@ -30,7 +30,7 @@ Chúng tôi không chỉ viết code, chúng tôi kể **một câu chuyện v�
 |-------------|----------|------------------|
 | **Huỳnh Lê Gia Huy** 💚 | Backend Developer | “Nếu bug không fix được, cứ restart lại VSCode.” |
 | **Trương Quang Quốc** 🌿 | Frontend Developer | “Code đẹp như giao diện chính là ước mơ.” |
-| **Ngụy Công Vũ Trung** ☕ | UI & API Integrator | “Merge thành công còn quý hơn trúng học bổng.” |
+| **Ngụy Công Vũ Trung** ☕ | UI & API & PM Integrator | “Merge thành công còn quý hơn trúng học bổng.” |
 
 ---
 
@@ -59,3 +59,4 @@ npm install
 
 # Chạy project
 npm start
+
