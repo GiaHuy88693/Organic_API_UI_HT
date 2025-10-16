@@ -1,0 +1,79 @@
+/* Số lượng */
+.qty-group {
+  background: #fafafa;
+  border-radius: 999px;
+  border: 1.5px solid #eee;
+  padding: 0 8px;
+  height: 48px;
+  min-width: 120px;
+  justify-content: center;
+  gap: 8px;
+}
+.qty-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #888;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+.qty-btn:hover {
+  background: #f0f0f0;
+  color: #38b000;
+}
+.qty-input {
+  width: 40px;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  outline: none;
+  pointer-events: none;
+}
+
+/* Nút Add to Cart */
+.add-cart-btn {
+  background: #06c000;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0 36px;
+  height: 48px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(6, 192, 0, 0.08);
+}
+.add-cart-btn:hover {
+  background: #38b000;
+  color: #fff;
+}
+
+/* Wishlist */
+.wishlist-btn-custom {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f5faf5;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  color: #38b000;
+  font-size: 1.3rem;
+}
+.wishlist-btn-custom.active,
+.wishlist-btn-custom:hover {
+  background: #e6ffe6;
+  color: #e74c3c;
+}
+.wishlist-btn-custom .bi-heart-fill {
+  color: #e74c3c;
+}

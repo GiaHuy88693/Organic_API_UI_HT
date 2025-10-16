@@ -1,0 +1,149 @@
+<?php
+SessionHelper::start();
+$orderId = $_SESSION['last_order_id'] ?? 'N/A';
+unset($_SESSION['last_order_id']);
+?>
+
+<?php include 'app/views/shares/header.php'; ?>
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+  }
+
+  .success-wrapper {
+    max-width: 1200px;
+    margin: 60px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    flex-wrap: wrap;
+  }
+
+  .success-left {
+    max-width: 600px;
+  }
+
+  .success-left h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #222;
+  }
+
+  .accordion-box {
+    border: 1px solid #198754;
+    border-radius: 8px;
+    background-color: #f6fff9;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .accordion-header {
+    background-color: #e6f4ea;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    color: #198754;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    font-size: 16px;
+  }
+
+  .accordion-header::after {
+    content: '−';
+    font-size: 20px;
+    color: #198754;
+  }
+
+  .accordion-body {
+    padding: 1rem 1.5rem;
+    background-color: #ffffff;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .accordion-body p {
+    margin: 0.5rem 0;
+  }
+
+  .accordion-body strong {
+    color: #198754;
+  }
+
+  .back-home-btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #198754;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  .back-home-btn:hover {
+    background-color: #146c43;
+  }
+
+  .success-img img {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    .success-wrapper {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .success-left, .success-img {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="success-wrapper">
+  <div class="success-left">
+    <h1>Đặt hàng thành công!</h1>
+
+    <div class="accordion-box">
+      <div class="accordion-header">
+        Mã đơn hàng: #DH123456
+      </div>
+      <div class="accordion-body">
+        <p><strong>Trạng thái:</strong> Đang xử lý</p>
+        <p><strong>Thời gian đặt:</strong> 09/10/2025 14:00</p>
+        <p><strong>Cảm ơn bạn đã mua hàng!</strong> Đơn hàng của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất.</p>
+      </div>
+    </div>
+
+    <a href="/" class="back-home-btn">← Về trang chủ</a>
+  </div>
+
+  <div class="success-img">
+    <img src="https://i.postimg.cc/QN6HbGrZ/c3fa74d0b3089a5088040ed87d06902b06455217.png" alt="Success Image">
+  </div>
+</div>
+
+<div id="footer"></div>
+<script>
+  // Load header và footer
+  fetch("/src/header.html")
+    .then((res) => res.text())
+    .then((data) => {
+      document.getElementById("header").innerHTML = data;
+    });
+
+  fetch("/src/footer.html")
+    .then((res) => res.text())
+    .then((html) => (document.getElementById("footer").innerHTML = html));
+</script>
+
+<?php include 'app/views/shares/footer.php'; ?>

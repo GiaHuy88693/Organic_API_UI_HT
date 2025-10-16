@@ -1,0 +1,159 @@
+<div class="row g-3 mb-4">
+  <!-- User Card -->
+  <div class="col-md-6">
+    <div class="card h-100 text-center p-4">
+      <img 
+        src="https://randomuser.me/api/portraits/men/1.jpg" 
+        alt="Avatar" 
+        class="rounded-circle mx-auto mb-3" 
+        style="width: 100px; height: 100px; object-fit: cover;">
+      <h5 class="mb-1">nam224400@gmail.com</h5>
+      <p class="text-muted small">Admin</p>
+      <a href="#" class="text-success fw-semibold" data-goto-settings>Edit Profile</a>
+    </div>
+  </div>    
+
+  <!-- Billing Address -->
+  <div class="col-md-6 d-flex">
+    <div class="card h-100 p-4 w-100 d-flex flex-column justify-content-between">
+      <div>
+        <h6 class="text-uppercase text-muted fw-bold mb-2 small">Billing Address</h6>
+        <p class="mb-1 fw-semibold">nam224400@gmail.com</p>
+        <p class="mb-1 text-muted small">123 Main St, District 1, HCMC</p>
+        <p class="mb-1 text-muted small">700000, Ho Chi Minh, Vietnam</p>
+        <p class="mb-1 text-muted small">nam224400@gmail.com</p>
+        <p class="mb-0 text-muted small">0901234567</p>
+      </div>
+      <a href="#" class="text-success fw-semibold" data-goto-settings>Edit Address</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    color: #333;
+  }
+  .order-history-wrapper {
+    max-width: 1000px;
+    padding: 0 1rem;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  table.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  table.order-table th,
+  table.order-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  table.order-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    color: #555;
+  }
+  table.order-table td strong {
+    color: #198754;
+  }
+  .status {
+    text-transform: capitalize;
+  }
+  .view-link {
+    color: #198754;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .view-link:hover {
+    text-decoration: underline;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 0.5rem;
+  }
+  .pagination button,
+  .pagination span {
+    padding: 0.5rem 0.9rem;
+    border: none;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .pagination .active {
+    background-color: #198754;
+    color: #fff;
+  }
+  .pagination button:hover:not(.active) {
+    background-color: #ddd;
+  }
+</style>
+
+<div class="order-history-wrapper">
+  <h2>Recent Order History</h2>
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#41</td>
+        <td>6 Sep, 2025</td>
+        <td><strong>840,000.00đ</strong></td>
+        <td>12 Products</td>
+        <td class="status">Processing</td>
+        <td>
+          <a class="view-link" href="order-detail.html">
+            <i class="fas fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>#37</td>
+        <td>21 Jul, 2025</td>
+        <td><strong>15,000.00đ</strong></td>
+        <td>1 Products</td>
+        <td class="status">Processing</td>
+        <td>
+          <a class="view-link" href="order-detail.html">
+            <i class="fas fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>#36</td>
+        <td>21 Jul, 2025</td>
+        <td><strong>42,000.00đ</strong></td>
+        <td>1 Products</td>
+        <td class="status">Processing</td>
+        <td>
+          <a class="view-link" href="order-detail.html">
+            <i class="fas fa-eye"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

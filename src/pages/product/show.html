@@ -1,0 +1,288 @@
+<div id="header"></div>
+<!-- Fancybox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.css" />
+<!-- Fancybox JS -->
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script>
+
+<link rel="stylesheet" href="../../css/show.css">
+<link rel="stylesheet" href="../../css/list.css">
+<div class="container py-5">
+  <!-- Sản phẩm mẫu -->
+  <div class="row g-5 align-items-start product-detail-main">
+    <!-- Left: Image Gallery -->
+    <div class="col-md-5">
+      <div class="d-flex flex-column align-items-center">
+        <!-- Main Image -->
+        <div class="main-img-box mb-3">
+          <a href="../../images/image1.png"
+             data-fancybox="gallery"
+             data-caption="Táo hữu cơ">
+            <img src="../../images/image1.png"
+                 class="main-img" alt="Táo hữu cơ">
+          </a>
+        </div>
+        <!-- Thumbnails -->
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <a href="../../images/image1.png"
+             data-fancybox="gallery"
+             data-caption="Táo hữu cơ">
+            <img src="../../images/image1.png"
+                 class="thumb-img border border-success"
+                 style="width:60px; height:60px; object-fit:contain; border-radius:8px; cursor:pointer;"
+                 alt="thumb">
+          </a>
+          <a href="../../images/image1.png"
+             data-fancybox="gallery"
+             data-caption="Táo hữu cơ">
+            <img src="../../images/image1.png"
+                 class="thumb-img border border-success"
+                 style="width:60px; height:60px; object-fit:contain; border-radius:8px; cursor:pointer;"
+                 alt="thumb">
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Right: Info -->
+    <div class="col-md-7">
+      <h2 class="fw-bold mb-2">
+        Táo hữu cơ
+        <span class="badge bg-success align-middle ms-2" style="font-size:0.9rem;">In Stock</span>
+      </h2>
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <span class="text-warning fs-5">
+          ★★★★☆
+        </span>
+        <span class="text-muted small">4 Review</span>
+        <span class="text-muted small">• SKU: 1</span>
+      </div>
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <span class="text-decoration-line-through text-muted fs-5">
+          70,000đ
+        </span>
+        <span class="fs-3 fw-bold text-success">
+          35,000đ
+        </span>
+        <span class="badge bg-danger-subtle text-danger" style="font-size:1rem;">
+          50% Off
+        </span>
+      </div>
+      <div class="mb-3"></div>
+      <div class="mb-3 text-secondary" style="max-width:600px;">
+        Táo hữu cơ tươi ngon, giàu dinh dưỡng, tốt cho sức khỏe.
+      </div>
+      <!-- Quantity & Add to Cart -->
+      <form class="d-flex align-items-center gap-3 mb-3 " style="max-width:100%;">
+        <div class="qty-group d-flex align-items-center">
+          <button type="button" class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+          <input type="number" id="qty" name="qty" value="1" min="1" class="qty-input" />
+          <button type="button" class="qty-btn" onclick="changeQty(1)">&#43;</button>
+        </div>
+        <button type="button" class="add-cart-btn flex-grow-1 " onclick="addToCart(1)">
+          <span>Add to Cart</span>
+          <i class="bi bi-bag ms-2"></i>
+        </button>
+        <button type="button"
+          class="wishlist-btn-custom ms-2"
+          onclick="toggleWishlist(1, this)">
+          <i class="bi bi-heart fs-5"></i>
+        </button>
+      </form>
+      <!-- Social Share -->
+      <div class="mb-3">
+        <span class="me-2">Share item:</span>
+        <a href="#" class="text-success me-2"><i class="bi bi-facebook fs-5"></i></a>
+        <a href="#" class="text-info me-2"><i class="bi bi-twitter fs-5"></i></a>
+        <a href="#" class="text-dark me-2"><i class="bi bi-pinterest fs-5"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-instagram fs-5"></i></a>
+      </div>
+      <div class="mb-1">
+        <strong>Category:</strong>
+        Trái cây
+      </div>
+      <div>
+        <strong>Tag:</strong>
+        Vegetables Healthy Táo hữu cơ Trái cây
+      </div>
+    </div>
+  </div>
+  <!-- Related Products -->
+  <div class="container my-5">
+    <h3 class="text-center fw-bold mb-4">Related Products</h3>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+      <!-- Sản phẩm liên quan mẫu 1 -->
+      <div class="col">
+        <div class="modern-product-card">
+          <div class="product-image-container">
+            <img src="../../images/image1.png" alt="Cam hữu cơ" />
+            <div class="sale-badge">Sale 20%</div>
+            <button class="wishlist-btn" onclick="toggleWishlist(2, this)">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <div class="product-name">
+              <a href="/Product/show/2">Cam hữu cơ</a>
+            </div>
+            <div class="product-price">
+              <span class="current-price">36,000đ</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star empty">★</span>
+              </div>
+              <span class="review-count">(120)</span>
+            </div>
+          </div>
+          <button class="cart-btn" onclick="addToCart(2)">
+            <i class="bi bi-bag fs-4"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Sản phẩm liên quan mẫu 2 -->
+      <div class="col">
+        <div class="modern-product-card">
+          <div class="product-image-container">
+            <img src="/images/product3.jpg" alt="Dưa hấu hữu cơ" />
+            <button class="wishlist-btn" onclick="toggleWishlist(3, this)">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+          <div class="product-content">
+            <div class="product-name">
+              <a href="/Product/show/3">Dưa hấu hữu cơ</a>
+            </div>
+            <div class="product-price">
+              <span class="current-price">50,000đ</span>
+            </div>
+            <div class="product-rating">
+              <div class="stars">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star empty">★</span>
+                <span class="star empty">★</span>
+              </div>
+              <span class="review-count">(80)</span>
+            </div>
+          </div>
+          <button class="cart-btn" onclick="addToCart(3)">
+            <i class="bi bi-bag fs-4"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Thêm sản phẩm liên quan khác nếu muốn -->
+    </div>
+  </div>
+</div>
+<div id="footer"></div>
+<script>
+  function changeQty(delta) {
+    var qty = document.getElementById('qty');
+    var val = parseInt(qty.value) + delta;
+    if (val < 1) val = 1;
+    qty.value = val;
+  }
+
+  function addToCart(productId) {
+    alert('Thêm sản phẩm ' + productId + ' vào giỏ hàng!');
+    // Sau này gọi API thêm vào giỏ hàng
+  }
+
+  function toggleWishlist(productId, btn) {
+    const icon = btn.querySelector('i');
+    icon.classList.toggle('bi-heart');
+    icon.classList.toggle('bi-heart-fill');
+    btn.classList.toggle('active');
+    // Sau này gọi API wishlist
+  }
+
+  // Load header và footer
+  fetch("/src/header.html")
+    .then((res) => res.text())
+    .then((data) => {
+      document.getElementById("header").innerHTML = data;
+    });
+
+  fetch("/src/footer.html")
+    .then((res) => res.text())
+    .then((html) => (document.getElementById("footer").innerHTML = html));
+
+  // Fancybox
+  Fancybox.bind("[data-fancybox='gallery']", {
+    Toolbar: {
+      display: [
+        "zoom",
+        "slideshow",
+        "fullscreen",
+        "download",
+        "thumbs",
+        "close",
+      ]
+    },
+    Thumbs: {
+      autoStart: true,
+    },
+    animated: true,
+  });
+</script>
+<style>
+  .product-detail-main .main-img-box {
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    background: #fff;
+    width: 100%;
+    max-width: 340px;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .product-detail-main .main-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 991px) {
+    .product-detail-main .main-img-box {
+      max-width: 100%;
+      height: 220px;
+    }
+  }
+
+  .related-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .related-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .related-cart-btn {
+    background: #f8f9fa;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+  }
+
+  .related-cart-btn:hover {
+    background: #e2e6ea;
+  }
+
+</style>
+

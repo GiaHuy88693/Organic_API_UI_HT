@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organic Store</title>
+  </head>
+  <body>
+    <div id="header"></div>
+    <div id="banner"></div>
+    <main>
+      <div id="list"></div>
+    </main>
+    <div id="footer"></div>
+
+    <script>
+      // Thực thi lại các <script> bên trong phần tử vừa gán innerHTML
+      function execScriptsIn(container) {
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach((old) => {
+          const s = document.createElement('script');
+          if (old.src) s.src = old.src;
+          else s.textContent = old.textContent;
+          if (old.type) s.type = old.type;
+          old.parentNode.replaceChild(s, old);
+        });
+      }
+
+      // Load header.html rồi kích hoạt script bên trong (áp dụng UI đăng nhập)
+      fetch('header.html')
+        .then((res) => res.text())
+        .then((html) => {
+          const el = document.getElementById('header');
+          el.innerHTML = html;
+          execScriptsIn(el);                // ✅ quan trọng: để script trong header chạy
+          // Nếu header đã expose applyAuthUI(), gọi lại lần nữa cho chắc
+          if (window.applyAuthUI) window.applyAuthUI();
+        });
+
+      // Load banner
+      fetch('banner.html')
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById('banner').innerHTML = data;
+        });
+
+      // Load danh sách sản phẩm
+      fetch('pages/product/list.html')
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById('list').innerHTML = data;
+        });
+
+      // Load footer
+      fetch('footer.html')
+        .then((res) => res.text())
+        .then((data) => {
+          document.getElementById('footer').innerHTML = data;
+        });
+    </script>
+  </body>
+</html>

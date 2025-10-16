@@ -1,0 +1,230 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<!-- Toast demo (cứng) -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  // Demo toast, bạn có thể gọi Toastify khi cần
+  // Toastify({ text: "Saved successfully!", duration: 4000, close: true, gravity: "top", position: "right", backgroundColor: "#28a745" }).showToast();
+</script>
+
+<div class="card p-4 mb-4">
+  <h5 class="fw-bold mb-3">Account Settings</h5>
+  <form class="row g-3 align-items-start" id="accountForm">
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-control" name="first_name" value="Nam">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="last_name" value="Duong">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" value="nam224400@gmail.com" readonly>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-control" name="phone" value="0901234567">
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+        <button type="reset" class="btn btn-outline-secondary px-4">Reset</button>
+      </div>
+    </div>
+    <div class="col-md-4 text-center">
+      <img id="previewAvatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Avatar" class="rounded-circle mb-3" style="width: 130px; height: 130px; object-fit: cover;">
+      <div class="d-grid">
+        <input type="file" class="form-control d-none" id="avatar" name="avatar" accept="image/*">
+        <label for="avatar" class="btn btn-outline-success rounded-pill">Choose Image</label>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4 mb-4">
+  <h5 class="fw-bold mb-3">Billing Address</h5>
+  <form class="row g-3" id="billingForm">
+    <div class="col-md-4">
+      <label class="form-label">First Name</label>
+      <input type="text" class="form-control" name="first_name" value="Nam" readonly>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Last Name</label>
+      <input type="text" class="form-control" name="last_name" value="Duong" readonly>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Company (optional)</label>
+      <input type="text" class="form-control" name="company_name" value="">
+    </div>
+    <div class="col-md-12">
+      <label class="form-label">Street Address</label>
+      <input type="text" class="form-control border-success" name="street_address" value="123 Main St, District 1, HCMC">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Country</label>
+      <select name="country_id" id="countrySelect" class="form-select">
+        <option value="VN" selected>Vietnam</option>
+        <option value="US">United States</option>
+        <option value="JP">Japan</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">State</label>
+      <select name="state_id" id="stateSelect" class="form-select">
+        <option value="SG" selected>Ho Chi Minh</option>
+        <option value="HN">Ha Noi</option>
+        <option value="DN">Da Nang</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Zip Code</label>
+      <input type="text" class="form-control" name="zip_code" value="700000">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" value="nam224400@gmail.com" readonly>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Phone</label>
+      <input type="text" class="form-control" value="0901234567" readonly>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-success px-4">Save Changes</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4 mb-4">
+  <h5 class="fw-bold mb-3">Secondary Address</h5>
+  <form class="row g-3" id="subAddressForm">
+    <div class="col-md-4">
+      <label class="form-label">First Name</label>
+      <input type="text" class="form-control" value="Nam" readonly>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Last Name</label>
+      <input type="text" class="form-control" value="Duong" readonly>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Company (optional)</label>
+      <input type="text" class="form-control" name="company_name" value="">
+    </div>
+    <div class="col-md-12">
+      <label class="form-label">Street Address</label>
+      <input type="text" class="form-control border-success" name="street_address" value="">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Country</label>
+      <select name="country_id" id="subCountrySelect" class="form-select">
+        <option value="VN" selected>Vietnam</option>
+        <option value="US">United States</option>
+        <option value="JP">Japan</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">State</label>
+      <select name="state_id" id="subStateSelect" class="form-select">
+        <option value="SG" selected>Ho Chi Minh</option>
+        <option value="HN">Ha Noi</option>
+        <option value="DN">Da Nang</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Zip Code</label>
+      <input type="text" class="form-control" name="zip_code" value="">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" value="nam224400@gmail.com" readonly>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Phone</label>
+      <input type="text" class="form-control" value="0901234567" readonly>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-outline-success px-4">Save Changes</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-4 mb-4">
+  <h5 class="fw-bold mb-3">Change Password</h5>
+  <form class="row g-3" id="changePasswordForm">
+    <div class="col-md-12">
+      <label class="form-label">Current Password</label>
+      <input type="password" class="form-control" name="current_password" placeholder="Current Password">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">New Password</label>
+      <div class="input-group">
+        <input type="password" class="form-control" name="new_password" placeholder="New Password">
+        <span class="input-group-text"><i class="bi bi-eye"></i></span>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Confirm New Password</label>
+      <div class="input-group">
+        <input type="password" class="form-control" name="confirm_password" placeholder="Confirm New Password">
+        <span class="input-group-text"><i class="bi bi-eye"></i></span>
+      </div>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-success px-4">Update Password</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Avatar preview
+  document.getElementById('avatar').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('previewAvatar');
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = 'https://randomuser.me/api/portraits/men/1.jpg';
+    }
+  });
+  document.getElementById('accountForm').addEventListener('reset', function() {
+    document.getElementById('previewAvatar').src = 'https://randomuser.me/api/portraits/men/1.jpg';
+  });
+
+  // Nếu muốn load state động khi chọn country, bạn sẽ call API ở đây
+  document.getElementById("countrySelect").addEventListener("change", function () {
+    // TODO: Call API để lấy danh sách state theo country
+    // Ví dụ: fetch('api/states?country=' + this.value).then(...)
+  });
+  document.getElementById("subCountrySelect").addEventListener("change", function () {
+    // TODO: Call API để lấy danh sách state cho địa chỉ phụ
+  });
+
+  // Submit các form, bạn sẽ call API ở đây
+  document.getElementById("accountForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    // TODO: Call API cập nhật thông tin tài khoản
+    Toastify({ text: "Account updated!", duration: 3000, backgroundColor: "#28a745" }).showToast();
+  });
+  document.getElementById("billingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    // TODO: Call API cập nhật địa chỉ thanh toán
+    Toastify({ text: "Billing address updated!", duration: 3000, backgroundColor: "#28a745" }).showToast();
+  });
+  document.getElementById("subAddressForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    // TODO: Call API cập nhật địa chỉ phụ
+    Toastify({ text: "Secondary address updated!", duration: 3000, backgroundColor: "#28a745" }).showToast();
+  });
+  document.getElementById("changePasswordForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    // TODO: Call API đổi mật khẩu
+    Toastify({ text: "Password changed!", duration: 3000, backgroundColor: "#28a745" }).showToast();
+  });
+</script>
+
+
+

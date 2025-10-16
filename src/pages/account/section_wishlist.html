@@ -1,0 +1,142 @@
+<style>
+  .wishlist-table {
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+
+  .wishlist-table th {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+
+  .wishlist-table td {
+    vertical-align: middle;
+    background-color: #fff;
+    border-top: none;
+    padding: 1rem;
+  }
+
+  .product-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 14px;
+  }
+
+  .old-price {
+    text-decoration: line-through;
+    color: #bbb;
+    font-size: 14px;
+    margin-left: 8px;
+  }
+
+  .stock-in {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+    background-color: #d1f7d6;
+    color: #0f8d2c;
+  }
+
+  .add-btn {
+    background-color: #00b300;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    border: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+
+  .add-btn:hover {
+    background-color: #009900;
+  }
+
+  .remove-btn {
+    border: 1px solid #dc3545;
+    background-color: white;
+    color: #dc3545;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    transition: 0.3s;
+  }
+
+  .remove-btn:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    color: #333;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+
+  .social-icon:hover {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+  }
+</style>
+
+<main>
+  <div class="container" id="tab-wishlist">
+    <div class="table-responsive">
+      <table class="table wishlist-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://i.postimg.cc/gcVXW8ys/0c993fa1e3446b7d29575d3d991b00a479103bab.jpg" class="product-img" alt="Táo hữu cơ">
+                <span>Táo hữu cơ</span>
+              </div>
+            </td>
+            <td>
+              <strong>80.000đ</strong>
+              <span class="old-price">160.000đ</span>
+            </td>
+            <td><span class="stock-in">In Stock</span></td>
+            <td class="text-end">
+              <button class="add-btn">Add to Cart</button>
+              <button class="remove-btn" title="Remove"><i class="bi bi-x"></i></button>
+            </td>
+          </tr>
+          <!-- Thêm sản phẩm khác nếu muốn -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+
+
