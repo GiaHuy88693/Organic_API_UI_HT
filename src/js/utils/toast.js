@@ -2,7 +2,13 @@
 (function () {
   function showToast(text, type = 'info') {
     // type: success | error | info | warn
-    Toastify({
+    const toastLib = window.Toastify;
+    if (typeof toastLib !== 'function') {
+      console.warn('Toastify library is not available');
+      return;
+    }
+
+    toastLib({
       text: text || '',
       duration: 3000,
       gravity: 'top',

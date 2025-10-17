@@ -3,10 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Danh sách sản phẩm</title>
-    <link rel="stylesheet" href="/list.css" />
+    <link rel="stylesheet" href="/src/css/list.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
     />
     <style>
       .carousel-control-btn {
@@ -45,7 +54,7 @@
         z-index: 9999;
         width: 48px;
         height: 48px;
-        background-color: #198754; /* Bootstrap green */
+        background-color: #198754;
         color: white;
         border: none;
         border-radius: 50%;
@@ -97,40 +106,52 @@
       .wishlist-btn {
         background-color: white;
         border: none;
-        outline: none; /* bỏ viền đen khi focus */
+        outline: none;
         border-radius: 50%;
         width: 36px;
         height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* nhẹ hơn chút */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         cursor: pointer;
         transition: background 0.2s, transform 0.2s;
       }
 
       .wishlist-btn:focus {
         outline: none;
-        box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.3); /* viền xanh lá nhẹ nếu cần focus */
+        box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.3);
       }
       .wishlist-btn:hover {
-        background-color: #f8f9fa; /* xám nhạt khi hover */
+        background-color: #f8f9fa;
         transform: scale(1.05);
       }
 
       .wishlist-btn i {
         font-size: 18px;
-        color: #000000; /* đen */
+        color: #000000;
       }
+      
+      .wishlist-btn.active i {
+        color: #dc3545;
+      }
+      
       .admin-btn {
         padding: 10px 10px !important;
       }
+      
+      .loading-overlay {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      
+      .toast-success { background: #10b981 !important; }
+      .toast-error { background: #ef4444 !important; }
+      
       @media (max-width: 575.98px) {
         .carousel-control-btn {
           display: none !important;
         }
-
-        /* Ngăn tràn lề */
         #productGridCarousel {
           overflow-x: hidden;
         }
@@ -140,7 +161,7 @@
   <body>
     <div id="header"></div>
 
-    <!-- Danh mục sản phẩm (set cứng) -->
+    <!-- Danh mục sản phẩm -->
     <section
       class="border-top border-bottom py-2 bg-white shadow-sm sticky-top d-none d-sm-block"
       style="z-index: 100"
@@ -148,31 +169,9 @@
       <div class="container">
         <div
           class="d-flex gap-3 flex-wrap align-items-center justify-content-center text-center"
+          id="categoryList"
         >
-          <a
-            href="#"
-            class="text-decoration-none text-dark fw-semibold small px-2 py-1"
-            style="white-space: nowrap"
-            >Trái cây</a
-          >
-          <a
-            href="#"
-            class="text-decoration-none text-dark fw-semibold small px-2 py-1"
-            style="white-space: nowrap"
-            >Thịt</a
-          >
-          <a
-            href="#"
-            class="text-decoration-none text-dark fw-semibold small px-2 py-1"
-            style="white-space: nowrap"
-            >Bánh mì</a
-          >
-          <a
-            href="#"
-            class="text-decoration-none text-dark fw-semibold small px-2 py-1"
-            style="white-space: nowrap"
-            >Làm đẹp</a
-          >
+          <!-- Categories sẽ được load từ API -->
         </div>
       </div>
     </section>
@@ -182,78 +181,41 @@
     <div class="container mt-5 position-relative">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Product List</h2>
+        <!-- Filters -->
+        <div class="d-flex gap-2">
+          <select id="sortFilter" class="form-select form-select-sm" style="width: auto;">
+            <option value="createdAt">Mới nhất</option>
+            <option value="name">Tên A-Z</option>
+            <option value="price">Giá tăng dần</option>
+            <option value="-price">Giá giảm dần</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Carousel 2x5 (set cứng dữ liệu mẫu) -->
+      <!-- Loading -->
+      <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <i class="bi bi-arrow-repeat" style="font-size: 3rem; animation: spin 1s linear infinite;"></i>
+        <p class="mt-3">Đang tải sản phẩm...</p>
+      </div>
+
+      <!-- Carousel Products -->
       <div
         id="productGridCarousel"
         class="carousel slide"
-        data-bs-ride="carousel"
+        data-bs-ride="false"
       >
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="row row-cols-2 row-cols-md-5 g-3">
-              <!-- Sản phẩm mẫu -->
-              <div class="col">
-                <div class="modern-product-card">
-                  <div class="hover-actions">
-                    <button
-                      type="button"
-                      class="wishlist-btn"
-                      title="Yêu thích"
-                    >
-                      <i class="bi bi-heart"></i>
-                    </button>
-                  </div>
-                  <div class="product-image-container">
-                    <img
-                      src="https://i.postimg.cc/gcVXW8ys/0c993fa1e3446b7d29575d3d991b00a479103bab.jpg"
-                      alt="Táo hữu cơ"
-                    />
-                    <div class="sale-badge">Sale 20%</div>
-                  </div>
-                  <div class="product-content">
-                    <div class="product-name">
-                      <a href="#">Táo hữu cơ</a>
-                    </div>
-                    <div class="product-price">
-                      <span class="current-price">80.000đ</span>
-                    </div>
-                    <div class="product-rating">
-                      <div class="stars">
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star empty">★</span>
-                      </div>
-                      <span class="review-count">(120)</span>
-                    </div>
-                  </div>
-                  <button class="cart-btn">
-                    <i class="bi bi-bag fs-4"></i>
-                  </button>
-                  <div class="admin-actions">
-                    <a href="#" class="admin-btn"
-                      ><i class="fas fa-edit me-1"></i> Sửa</a
-                    >
-                    <a href="#" class="admin-btn delete"
-                      ><i class="fas fa-trash me-1"></i> Xóa</a
-                    >
-                  </div>
-                </div>
-              </div>
-              <!-- Thêm các sản phẩm khác tương tự ở đây nếu muốn -->
-            </div>
-          </div>
-          <!-- Thêm các carousel-item khác nếu muốn -->
+        <div class="carousel-inner" id="productCarouselInner">
+          <!-- Products sẽ được render ở đây -->
         </div>
-        <!-- Điều hướng (ẩn trên mobile) -->
+        
+        <!-- Navigation -->
         <button
           class="carousel-control-btn carousel-control-prev d-none d-sm-flex"
           type="button"
           data-bs-target="#productGridCarousel"
           data-bs-slide="prev"
+          id="prevBtn"
+          style="display: none !important;"
         >
           &#10094;
         </button>
@@ -262,9 +224,17 @@
           type="button"
           data-bs-target="#productGridCarousel"
           data-bs-slide="next"
+          id="nextBtn"
+          style="display: none !important;"
         >
           &#10095;
         </button>
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="text-center py-5" style="display: none;">
+        <i class="bi bi-box" style="font-size: 4rem; color: #ccc;"></i>
+        <p class="text-muted mt-3">Không tìm thấy sản phẩm nào</p>
       </div>
     </div>
 
@@ -273,25 +243,304 @@
 
     <div id="footer"></div>
 
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Toastify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  
+  <script src="../../js/config/api.config.js"></script>
+  <script src="../../js/utils/storage.js"></script>
+  <script src="../../js/utils/toast.js"></script>
+  <script src="../../js/utils/http.client.js"></script>
+  <script src="../../js/services/auth.service.js"></script>
+  <script src="../../js/services/cart.service.js"></script>
+  <script src="../../js/services/product.service.js"></script>
+
     <script>
-      // Gán header, banner, footer từ file cứng
-      fetch("../../header.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("header").innerHTML = data;
+      let products = [];
+      let currentSort = 'createdAt';
+
+      // Khởi tạo
+      document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        setupEventListeners();
+        loadHeaderFooter();
+      });
+
+      // Load products từ API
+      async function loadProducts() {
+        try {
+          showLoading(true);
+
+          const { items = [], meta } = await window.ProductService.getList({
+            page: 1,
+            limit: 50,
+            sortBy: currentSort
+          });
+
+          products = Array.isArray(items) ? items : [];
+          console.log('Meta phân trang:', meta);
+
+          if (products.length === 0) {
+            showEmptyState();
+            return;
+          }
+          renderProductCarousel(products);
+
+        } catch (error) {
+          console.error('Load products error:', error);
+          window.Toast.error(error.message || 'Không thể tải sản phẩm');
+          showEmptyState();
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      // Render products trong carousel (2 hàng x 5 cột)
+      function renderProductCarousel(productList) {
+        const carouselInner = document.getElementById('productCarouselInner');
+        
+        if (!productList || productList.length === 0) {
+          showEmptyState();
+          return;
+        }
+
+        const itemsPerSlide = 10; // 2 hàng x 5 cột
+        const slides = [];
+        
+        for (let i = 0; i < productList.length; i += itemsPerSlide) {
+          slides.push(productList.slice(i, i + itemsPerSlide));
+        }
+
+        carouselInner.innerHTML = slides.map((slideProducts, slideIndex) => `
+          <div class="carousel-item ${slideIndex === 0 ? 'active' : ''}">
+            <div class="row row-cols-2 row-cols-md-5 g-3">
+              ${slideProducts.map(product => renderProductCard(product)).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        // Show/hide navigation buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (slides.length > 1) {
+          prevBtn.style.display = 'flex';
+          nextBtn.style.display = 'flex';
+        } else {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
+
+        document.getElementById('productGridCarousel').style.display = 'block';
+        document.getElementById('emptyState').style.display = 'none';
+
+        // Setup event listeners
+        setupProductActions();
+      }
+
+      // Render single product card
+      function renderProductCard(product) {
+        const image = product.images?.[0]?.url || 'https://via.placeholder.com/300';
+        const price = formatPrice(product.price || 0);
+        const hasDiscount = product.discount > 0;
+        const discountPrice = hasDiscount ? formatPrice(product.price * (1 - product.discount / 100)) : null;
+
+        return `
+          <div class="col">
+            <div class="modern-product-card">
+              <div class="hover-actions">
+                <button
+                  type="button"
+                  class="wishlist-btn"
+                  title="Yêu thích"
+                  data-product-id="${product._id}"
+                >
+                  <i class="bi bi-heart"></i>
+                </button>
+              </div>
+              <div class="product-image-container">
+                <a href="/Product/show/${product._id}">
+                  <img
+                    src="${image}"
+                    alt="${product.name}"
+                    onerror="this.src='https://via.placeholder.com/300'"
+                  />
+                </a>
+                ${hasDiscount ? `<div class="sale-badge">Sale ${product.discount}%</div>` : ''}
+              </div>
+              <div class="product-content">
+                <div class="product-name">
+                  <a href="/Product/show/${product._id}">${product.name}</a>
+                </div>
+                <div class="product-price">
+                  ${hasDiscount ? `<span class="old-price">${price}</span>` : ''}
+                  <span class="current-price">${hasDiscount ? discountPrice : price}</span>
+                </div>
+                <div class="product-rating">
+                  <div class="stars">
+                    ${renderStars(product.rating || 4)}
+                  </div>
+                  <span class="review-count">(${product.reviewCount || 0})</span>
+                </div>
+              </div>
+              <button class="cart-btn quick-add-btn" data-product-id="${product._id}">
+                <i class="bi bi-bag fs-4"></i>
+              </button>
+              ${renderAdminActions(product._id)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Render stars
+      function renderStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+          stars += `<span class="star ${i <= rating ? '' : 'empty'}">★</span>`;
+        }
+        return stars;
+      }
+
+      // Render admin actions (nếu là admin)
+      function renderAdminActions(productId) {
+        // Check if user is admin
+        const user = window.Storage?.getUser?.();
+        if (!user || user.role !== 'admin') return '';
+
+        return `
+          <div class="admin-actions">
+            <a href="/Product/edit/${productId}" class="admin-btn">
+              <i class="fas fa-edit me-1"></i> Sửa
+            </a>
+            <button class="admin-btn delete btn-delete-product" data-id="${productId}">
+              <i class="fas fa-trash me-1"></i> Xóa
+            </button>
+          </div>
+        `;
+      }
+
+      // Setup product actions
+      function setupProductActions() {
+        // Quick add to cart
+        document.querySelectorAll('.quick-add-btn').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productId = this.dataset.productId;
+            await addToCart(productId);
+          });
         });
 
-      fetch("../../banner.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("banner").innerHTML = data;
+        // Wishlist
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(this);
+          });
         });
 
-      fetch("../../footer.html")
-        .then((res) => res.text())
-        .then((data) => {
-          document.getElementById("footer").innerHTML = data;
+        // Delete product (admin only)
+        document.querySelectorAll('.btn-delete-product').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productId = this.dataset.id;
+            await deleteProduct(productId);
+          });
         });
+      }
+
+      // Add to cart
+      async function addToCart(productId) {
+        try {
+          await window.CartService.add({
+            productId,
+            quantity: 1
+          });
+          window.Toast.success('Đã thêm vào giỏ hàng!');
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          window.Toast.error(error.message || 'Không thể thêm vào giỏ hàng');
+        }
+      }
+
+      // Toggle wishlist
+      function toggleWishlist(btn) {
+        const icon = btn.querySelector('i');
+        icon.classList.toggle('bi-heart');
+        icon.classList.toggle('bi-heart-fill');
+        btn.classList.toggle('active');
+        
+        if (btn.classList.contains('active')) {
+          window.Toast.success('Đã thêm vào yêu thích');
+        } else {
+          window.Toast.info('Đã xóa khỏi yêu thích');
+        }
+      }
+
+      // Delete product (admin)
+      async function deleteProduct(productId) {
+        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
+
+        try {
+          await window.ProductService.delete(productId);
+          window.Toast.success('Đã xóa sản phẩm');
+          loadProducts();
+        } catch (error) {
+          window.Toast.error(error.message || 'Không thể xóa sản phẩm');
+        }
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Sort filter
+        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
+          currentSort = e.target.value;
+          loadProducts();
+        });
+      }
+
+      // Helper functions
+      function showLoading(show) {
+        document.getElementById('loadingOverlay').style.display = show ? 'block' : 'none';
+        document.getElementById('productGridCarousel').style.display = show ? 'none' : 'block';
+      }
+
+      function showEmptyState() {
+        document.getElementById('productGridCarousel').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
+
+      function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', {
+          style: 'currency',
+          currency: 'VND'
+        }).format(price);
+      }
+
+      function loadHeaderFooter() {
+        fetch("/src/header.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("header").innerHTML = data;
+          });
+
+        fetch("/src/banner.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("banner").innerHTML = data;
+          });
+
+        fetch("/src/footer.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("footer").innerHTML = data;
+          });
+      }
 
       // Back to top
       const backToTopBtn = document.getElementById("backToTop");
@@ -306,5 +555,12 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     </script>
+    
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </body>
 </html>

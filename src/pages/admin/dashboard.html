@@ -38,17 +38,22 @@
 
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="product.html" style="color: #fff">
+                <a class="nav-link" href="/src/pages/admin/product.html" style="color: #fff">
                   <i class="bi bi-box-seam me-2"></i> Product Management
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="category.html" style="color: #fff">
+                <a class="nav-link" href="/src/pages/admin/category.html" style="color: #fff">
                   <i class="bi bi-tags me-2"></i> Category Management
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="user.html" style="color: #fff">
+                <a class="nav-link" href="/src/pages/admin/role.html" style="color: #fff">
+                  <i class="bi bi-shield-lock me-2"></i> Role Management
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/src/pages/admin/user.html" style="color: #fff">
                   <i class="bi bi-people me-2"></i> User Management
                 </a>
               </li>
@@ -101,36 +106,8 @@
     </style>
 
     <script>
-      // Hàm load nội dung vào #admin-content
-      function loadAdminSection(file, title) {
-        fetch(file)
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById('admin-content').innerHTML = html;
-            document.querySelectorAll('.sidebar .nav-link').forEach(link => link.classList.remove('active'));
-            if (title) {
-              document.querySelector(`.sidebar .nav-link[data-section="${title}"]`).classList.add('active');
-            }
-          });
-      }
-
-      // Gán sự kiện cho sidebar
-      document.querySelector('.sidebar .nav-link[href="product.html"]').setAttribute('data-section', 'product');
-      document.querySelector('.sidebar .nav-link[href="category.html"]').setAttribute('data-section', 'category');
-      document.querySelector('.sidebar .nav-link[href="user.html"]').setAttribute('data-section', 'user');
-
-      document.querySelector('.sidebar .nav-link[href="product.html"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        loadAdminSection('product.html', 'product');
-      });
-      document.querySelector('.sidebar .nav-link[href="category.html"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        loadAdminSection('category.html', 'category');
-      });
-      document.querySelector('.sidebar .nav-link[href="user.html"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        loadAdminSection('user.html', 'user');
-      });
+      // Direct navigation - no need to load fragments
+      // Links now navigate to full pages directly
     </script>
   </body>
 </html>

@@ -12,7 +12,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
     />
-    <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="/src/index.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -22,8 +22,8 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
     />
-    <link rel="stylesheet" href="./css/banner.css" />
-    <link rel="stylesheet" href="./css/list.css" />
+  <link rel="stylesheet" href="/src/css/banner.css" />
+  <link rel="stylesheet" href="/src/css/list.css" />
     <script
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/toastify-js"
@@ -137,7 +137,16 @@
             >
           </div>
           <!-- Nếu đã đăng nhập thì thay đổi đoạn này -->
-          <div id="auth-user" class="d-none">
+          <div id="auth-user" class="d-none d-flex align-items-center">
+            <a
+              href="/src/pages/cart/cart.html"
+              class="d-flex align-items-center text-decoration-none text-success position-relative"
+            >
+              <i class="bi bi-cart3 fs-4"></i>
+            </a>
+            
+            <div class="vr mx-2"></div>
+            
             <div class="dropdown position-relative">
               <a
                 href="#"
@@ -155,8 +164,8 @@
                 aria-labelledby="userDropdown"
               >
                 <li id="adminItem" class="d-none">
-                  <a class="dropdown-item" href="/src/pages/admin/index.html"
-                    >Admin Dashboard</a
+                  <a class="dropdown-item" href="/src/pages/admin/dashboard.html"
+                    ><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a
                   >
                 </li>
                 <li>
@@ -189,14 +198,6 @@
                 >ADMIN</span
               >
             </div>
-
-            <div class="vr mx-2"></div>
-            <a
-              href="/src/pages/cart/index.html"
-              class="d-flex align-items-center text-decoration-none text-success position-relative"
-            >
-              <i class="bi bi-cart3 fs-4"></i>
-            </a>
           </div>
         </div>
       </div>
@@ -664,9 +665,16 @@
         const nameEl = document.getElementById("userName");
         if (nameEl) nameEl.textContent = name;
 
-        const isAdmin = (payload.role === "ADMIN") || (Array.isArray(payload.roles) && payload.roles.includes("ADMIN"));
+        // Check if user is admin using roleName from token
+        const isAdmin = payload.roleName === "ADMIN" || 
+                       payload.role === "ADMIN" || 
+                       (Array.isArray(payload.roles) && payload.roles.includes("ADMIN"));
+        
         document.getElementById("adminBadge")?.classList.toggle("d-none", !isAdmin);
         document.getElementById("adminItem")?.classList.toggle("d-none", !isAdmin);
+        
+        // Log role for debugging
+        console.log('User role:', payload.roleName || payload.role);
       } else {
         user.classList.add("d-none");
         guest.classList.remove("d-none");

@@ -97,8 +97,24 @@
           <!-- Email -->
           <div class="mb-3">
             <label class="form-label">Email address</label>
-            <input type="email" name="username" class="form-control" placeholder="Enter email"/>
-            <div class="text-danger mt-1" id="usernameError"></div>
+            <div class="input-group">
+              <input type="email" name="email" class="form-control" placeholder="Enter email" id="emailInput"/>
+              <button type="button" class="btn btn-outline-primary" id="sendCodeBtn">Send Code</button>
+            </div>
+            <div class="text-danger mt-1" id="emailError"></div>
+            <div class="text-success mt-1" id="emailSuccess"></div>
+          </div>
+          <!-- Full Name -->
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="fullname" class="form-control" placeholder="Enter full name"/>
+            <div class="text-danger mt-1" id="fullnameError"></div>
+          </div>
+          <!-- Phone Number -->
+          <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" name="phoneNumber" class="form-control" placeholder="Enter phone number"/>
+            <div class="text-danger mt-1" id="phoneNumberError"></div>
           </div>
           <!-- Password -->
           <div class="mb-3">
@@ -109,15 +125,17 @@
           <!-- Confirm Password -->
           <div class="mb-3">
             <label class="form-label">Confirm password</label>
-            <input type="password" name="confirmpassword" class="form-control" placeholder="Enter confirm password"/>
-            <div class="text-danger mt-1" id="confirmpasswordError"></div>
+            <input type="password" name="confirmPassword" class="form-control" placeholder="Enter confirm password"/>
+            <div class="text-danger mt-1" id="confirmPasswordError"></div>
           </div>
-          <!-- Checkbox admin (luôn hiển thị, set cứng) -->
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="is_admin" id="is_admin" value="1"/>
-            <label class="form-check-label" for="is_admin">Register as administrator</label>
-            <div class="text-danger mt-1" id="isadminError"></div>
+          <!-- Verification Code (Optional for testing) -->
+          <div class="mb-3">
+            <label class="form-label">Verification Code <span class="text-muted">(Leave empty if not required)</span></label>
+            <input type="text" name="code" class="form-control" placeholder="Enter verification code"/>
+            <div class="text-danger mt-1" id="codeError"></div>
+            <small class="text-muted">Enter the code sent to your email, or leave empty if not needed</small>
           </div>
+          
           <button type="submit" class="btn btn-primary w-100 login-btn">Register</button>
           <div class="login-footer mt-3">
             Already have an account? <a href="login.html">Login</a>
@@ -126,58 +144,165 @@
       </div>
     </section>
     <script src="../../js/config/api.config.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/http.client.js"></script>
     <script src="../../js/services/auth.service.js"></script>
     <script>
+      // Send OTP Code
+      document.getElementById("sendCodeBtn").addEventListener("click", async function() {
+        const emailInput = document.getElementById("emailInput");
+        const email = emailInput.value.trim();
+        const emailError = document.getElementById("emailError");
+        const emailSuccess = document.getElementById("emailSuccess");
+        
+        emailError.textContent = "";
+        emailSuccess.textContent = "";
+        
+        if (!email) {
+          emailError.textContent = "Please enter email first.";
+          return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          emailError.textContent = "Invalid email format.";
+          return;
+        }
+        
+        this.disabled = true;
+        this.textContent = "Sending...";
+        
+        try {
+          console.log('Sending OTP to:', email);
+          
+          // Backend uses VerificationCodeType enum with REGISTER type
+          let payload = { 
+            email: email,
+            type: 'REGISTER'  // Match VerificationCodeType.REGISTER
+          };
+          
+          console.log('OTP Payload:', payload);
+          const result = await window.AuthService.sendOTP(payload);
+          
+          console.log('OTP Result:', result);
+          console.log('OTP Message:', result.message);
+          console.log('OTP Errors:', result.errors);
+          
+          if (result.success) {
+            emailSuccess.textContent = result.message || "Verification code sent to your email!";
+            this.textContent = "Sent ✓";
+            
+            // Enable resend after 60 seconds
+            setTimeout(() => {
+              this.disabled = false;
+              this.textContent = "Resend Code";
+            }, 60000);
+          } else {
+            console.error('OTP Failed:', result);
+            
+            // Handle message as array or string
+            let errorMsg = "Failed to send code.";
+            if (Array.isArray(result.message)) {
+              errorMsg = result.message.join(', ');
+            } else if (result.message) {
+              errorMsg = result.message;
+            }
+            
+            emailError.textContent = errorMsg;
+            this.disabled = false;
+            this.textContent = "Send Code";
+          }
+        } catch (err) {
+          console.error('Send OTP error:', err);
+          emailError.textContent = "Error sending code. Please try again. " + (err.message || '');
+          this.disabled = false;
+          this.textContent = "Send Code";
+        }
+      });
+      
+      // Register form
       document.getElementById("registerForm").addEventListener("submit", async function (e) {
         e.preventDefault();
         // Xóa lỗi cũ
-        ["usernameError", "passwordError", "confirmpasswordError", "isadminError"].forEach(id => {
-          document.getElementById(id).textContent = "";
+        ["emailError", "fullnameError", "phoneNumberError", "passwordError", "confirmPasswordError", "codeError"].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = "";
         });
         let isValid = true;
-        const username = this.username.value.trim();
+        
+        const email = this.email.value.trim();
+        const fullname = this.fullname.value.trim();
+        const phoneNumber = this.phoneNumber.value.trim();
         const password = this.password.value;
-        const confirm = this.confirmpassword.value;
-        const isAdmin = this.is_admin.checked;
+        const confirmPassword = this.confirmPassword.value;
+        const code = this.code.value.trim();
 
-        if (!username) {
-          document.getElementById("usernameError").textContent = "Email address is required.";
+        if (!email) {
+          document.getElementById("emailError").textContent = "Email address is required.";
+          isValid = false;
+        }
+        if (!fullname) {
+          document.getElementById("fullnameError").textContent = "Full name is required.";
+          isValid = false;
+        }
+        if (!phoneNumber) {
+          document.getElementById("phoneNumberError").textContent = "Phone number is required.";
           isValid = false;
         }
         if (!password) {
           document.getElementById("passwordError").textContent = "Password is required.";
           isValid = false;
         }
-        if (!confirm) {
-          document.getElementById("confirmpasswordError").textContent = "Please confirm your password.";
+        if (!confirmPassword) {
+          document.getElementById("confirmPasswordError").textContent = "Please confirm your password.";
           isValid = false;
         }
-        if (password && confirm && password !== confirm) {
-          document.getElementById("confirmpasswordError").textContent = "Passwords do not match.";
+        if (password && confirmPassword && password !== confirmPassword) {
+          document.getElementById("confirmPasswordError").textContent = "Passwords do not match.";
           isValid = false;
         }
+        // Code is now optional - remove validation
+        // if (!code) {
+        //   document.getElementById("codeError").textContent = "Verification code is required.";
+        //   isValid = false;
+        // }
         if (!isValid) return;
 
-        // Call API register
+        // Call API register - match exact Swagger schema
         try {
-          const result = await AuthService.register(username, password, isAdmin);
+          const payload = {
+            email: email,
+            fullname: fullname,
+            password: password,
+            phoneNumber: phoneNumber,
+            confirmPassword: confirmPassword,
+            code: code
+          };
+          
+          console.log('Register payload:', payload);
+          
+          const result = await window.AuthService.register(payload);
+          
           if (result.success) {
             alert("Đăng ký thành công! Vui lòng đăng nhập.");
             window.location.href = "login.html";
           } else {
             if (result.errors && Array.isArray(result.errors)) {
               result.errors.forEach(error => {
-                if (error.field === "username") document.getElementById("usernameError").textContent = error.message;
-                if (error.field === "password") document.getElementById("passwordError").textContent = error.message;
-                if (error.field === "confirmpassword") document.getElementById("confirmpasswordError").textContent = error.message;
-                if (error.field === "is_admin") document.getElementById("isadminError").textContent = error.message;
+                const errorId = error.field + 'Error';
+                const errorEl = document.getElementById(errorId);
+                if (errorEl) errorEl.textContent = error.message;
               });
-            } else {
-              alert(result.message || "Đăng ký thất bại!");
+            }
+            // Hiển thị message chung nếu có
+            if (result.message) {
+              alert(result.message);
             }
           }
         } catch (err) {
-          alert("Có lỗi xảy ra, vui lòng thử lại!");
+          console.error('Register error:', err);
+          alert("Có lỗi xảy ra, vui lòng thử lại! Chi tiết: " + err.message);
         }
       });
     </script>

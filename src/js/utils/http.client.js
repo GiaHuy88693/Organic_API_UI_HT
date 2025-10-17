@@ -1,11 +1,16 @@
 // src/js/utils/http.client.js
 (function () {
   function normalizeErrorPayload(payload, status) {
-    const message =
+    let message =
       payload?.message ||
       payload?.error ||
       payload?.errors?.message ||
       `HTTP ${status || ''}`.trim();
+    
+    // Handle message as array (some backends return array of messages)
+    if (Array.isArray(message)) {
+      message = message.join(', ');
+    }
 
     let errors = null;
     if (Array.isArray(payload?.errors)) {
@@ -46,6 +51,19 @@
 
     if (!res.ok) {
       const { message, errors } = normalizeErrorPayload(data, res.status);
+      
+      // Auto redirect to login on 401 Unauthorized
+      if (res.status === 401 && withAuth) {
+        console.warn('401 Unauthorized - redirecting to login');
+        if (window.Storage?.clearTokens) {
+          window.Storage.clearTokens();
+        }
+        // Delay to allow error message to show
+        setTimeout(() => {
+          window.location.href = '/src/pages/auth/login.html';
+        }, 1500);
+      }
+      
       return { ok: false, status: res.status, data, message, errors };
     }
     return { ok: true, status: res.status, data };

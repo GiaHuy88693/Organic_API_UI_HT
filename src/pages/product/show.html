@@ -1,288 +1,547 @@
-<div id="header"></div>
-<!-- Fancybox CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.css" />
-<!-- Fancybox JS -->
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script>
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" href="/list.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <style>
+      .carousel-control-btn {
+        width: 44px;
+        height: 44px;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
 
-<link rel="stylesheet" href="../../css/show.css">
-<link rel="stylesheet" href="../../css/list.css">
-<div class="container py-5">
-  <!-- Sản phẩm mẫu -->
-  <div class="row g-5 align-items-start product-detail-main">
-    <!-- Left: Image Gallery -->
-    <div class="col-md-5">
-      <div class="d-flex flex-column align-items-center">
-        <!-- Main Image -->
-        <div class="main-img-box mb-3">
-          <a href="../../images/image1.png"
-             data-fancybox="gallery"
-             data-caption="Táo hữu cơ">
-            <img src="../../images/image1.png"
-                 class="main-img" alt="Táo hữu cơ">
-          </a>
+      .carousel-control-btn:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      .carousel-control-prev {
+        left: -50px;
+      }
+
+      .carousel-control-next {
+        right: -50px;
+      }
+      #backToTop {
+        position: fixed;
+        bottom: 40px;
+        right: 30px;
+        z-index: 9999;
+        width: 48px;
+        height: 48px;
+        background-color: #198754;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.5);
+        transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      #backToTop.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: scale(1);
+      }
+
+      #backToTop:hover {
+        background-color: #157347;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      .modern-product-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hover-actions {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 5;
+      }
+
+      .modern-product-card:hover .hover-actions {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .wishlist-btn {
+        background-color: white;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+      .wishlist-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.3);
+      }
+      .wishlist-btn:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.05);
+      }
+
+      .wishlist-btn i {
+        font-size: 18px;
+        color: #000000;
+      }
+      
+      .wishlist-btn.active i {
+        color: #dc3545;
+      }
+      
+      .admin-btn {
+        padding: 10px 10px !important;
+      }
+      
+      .loading-overlay {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      
+      .toast-success { background: #10b981 !important; }
+      .toast-error { background: #ef4444 !important; }
+      
+      @media (max-width: 575.98px) {
+        .carousel-control-btn {
+          display: none !important;
+        }
+        #productGridCarousel {
+          overflow-x: hidden;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <!-- Danh mục sản phẩm -->
+    <section
+      class="border-top border-bottom py-2 bg-white shadow-sm sticky-top d-none d-sm-block"
+      style="z-index: 100"
+    >
+      <div class="container">
+        <div
+          class="d-flex gap-3 flex-wrap align-items-center justify-content-center text-center"
+          id="categoryList"
+        >
+          <!-- Categories sẽ được load từ API -->
         </div>
-        <!-- Thumbnails -->
-        <div class="d-flex flex-wrap gap-2 align-items-center">
-          <a href="../../images/image1.png"
-             data-fancybox="gallery"
-             data-caption="Táo hữu cơ">
-            <img src="../../images/image1.png"
-                 class="thumb-img border border-success"
-                 style="width:60px; height:60px; object-fit:contain; border-radius:8px; cursor:pointer;"
-                 alt="thumb">
-          </a>
-          <a href="../../images/image1.png"
-             data-fancybox="gallery"
-             data-caption="Táo hữu cơ">
-            <img src="../../images/image1.png"
-                 class="thumb-img border border-success"
-                 style="width:60px; height:60px; object-fit:contain; border-radius:8px; cursor:pointer;"
-                 alt="thumb">
-          </a>
+      </div>
+    </section>
+
+    <div id="banner"></div>
+
+    <div class="container mt-5 position-relative">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Product List</h2>
+        <!-- Filters -->
+        <div class="d-flex gap-2">
+          <select id="sortFilter" class="form-select form-select-sm" style="width: auto;">
+            <option value="createdAt">Mới nhất</option>
+            <option value="name">Tên A-Z</option>
+            <option value="price">Giá tăng dần</option>
+            <option value="-price">Giá giảm dần</option>
+          </select>
         </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <i class="bi bi-arrow-repeat" style="font-size: 3rem; animation: spin 1s linear infinite;"></i>
+        <p class="mt-3">Đang tải sản phẩm...</p>
+      </div>
+
+      <!-- Carousel Products -->
+      <div
+        id="productGridCarousel"
+        class="carousel slide"
+        data-bs-ride="false"
+      >
+        <div class="carousel-inner" id="productCarouselInner">
+          <!-- Products sẽ được render ở đây -->
+        </div>
+        
+        <!-- Navigation -->
+        <button
+          class="carousel-control-btn carousel-control-prev d-none d-sm-flex"
+          type="button"
+          data-bs-target="#productGridCarousel"
+          data-bs-slide="prev"
+          id="prevBtn"
+          style="display: none !important;"
+        >
+          &#10094;
+        </button>
+        <button
+          class="carousel-control-btn carousel-control-next d-none d-sm-flex"
+          type="button"
+          data-bs-target="#productGridCarousel"
+          data-bs-slide="next"
+          id="nextBtn"
+          style="display: none !important;"
+        >
+          &#10095;
+        </button>
+      </div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="text-center py-5" style="display: none;">
+        <i class="bi bi-box" style="font-size: 4rem; color: #ccc;"></i>
+        <p class="text-muted mt-3">Không tìm thấy sản phẩm nào</p>
       </div>
     </div>
-    <!-- Right: Info -->
-    <div class="col-md-7">
-      <h2 class="fw-bold mb-2">
-        Táo hữu cơ
-        <span class="badge bg-success align-middle ms-2" style="font-size:0.9rem;">In Stock</span>
-      </h2>
-      <div class="d-flex align-items-center gap-3 mb-2">
-        <span class="text-warning fs-5">
-          ★★★★☆
-        </span>
-        <span class="text-muted small">4 Review</span>
-        <span class="text-muted small">• SKU: 1</span>
-      </div>
-      <div class="d-flex align-items-center gap-3 mb-2">
-        <span class="text-decoration-line-through text-muted fs-5">
-          70,000đ
-        </span>
-        <span class="fs-3 fw-bold text-success">
-          35,000đ
-        </span>
-        <span class="badge bg-danger-subtle text-danger" style="font-size:1rem;">
-          50% Off
-        </span>
-      </div>
-      <div class="mb-3"></div>
-      <div class="mb-3 text-secondary" style="max-width:600px;">
-        Táo hữu cơ tươi ngon, giàu dinh dưỡng, tốt cho sức khỏe.
-      </div>
-      <!-- Quantity & Add to Cart -->
-      <form class="d-flex align-items-center gap-3 mb-3 " style="max-width:100%;">
-        <div class="qty-group d-flex align-items-center">
-          <button type="button" class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
-          <input type="number" id="qty" name="qty" value="1" min="1" class="qty-input" />
-          <button type="button" class="qty-btn" onclick="changeQty(1)">&#43;</button>
-        </div>
-        <button type="button" class="add-cart-btn flex-grow-1 " onclick="addToCart(1)">
-          <span>Add to Cart</span>
-          <i class="bi bi-bag ms-2"></i>
-        </button>
-        <button type="button"
-          class="wishlist-btn-custom ms-2"
-          onclick="toggleWishlist(1, this)">
-          <i class="bi bi-heart fs-5"></i>
-        </button>
-      </form>
-      <!-- Social Share -->
-      <div class="mb-3">
-        <span class="me-2">Share item:</span>
-        <a href="#" class="text-success me-2"><i class="bi bi-facebook fs-5"></i></a>
-        <a href="#" class="text-info me-2"><i class="bi bi-twitter fs-5"></i></a>
-        <a href="#" class="text-dark me-2"><i class="bi bi-pinterest fs-5"></i></a>
-        <a href="#" class="text-dark"><i class="bi bi-instagram fs-5"></i></a>
-      </div>
-      <div class="mb-1">
-        <strong>Category:</strong>
-        Trái cây
-      </div>
-      <div>
-        <strong>Tag:</strong>
-        Vegetables Healthy Táo hữu cơ Trái cây
-      </div>
-    </div>
-  </div>
-  <!-- Related Products -->
-  <div class="container my-5">
-    <h3 class="text-center fw-bold mb-4">Related Products</h3>
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
-      <!-- Sản phẩm liên quan mẫu 1 -->
-      <div class="col">
-        <div class="modern-product-card">
-          <div class="product-image-container">
-            <img src="../../images/image1.png" alt="Cam hữu cơ" />
-            <div class="sale-badge">Sale 20%</div>
-            <button class="wishlist-btn" onclick="toggleWishlist(2, this)">
-              <i class="far fa-heart"></i>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" title="Về đầu trang">↑</button>
+
+    <div id="footer"></div>
+
+  <script src="../../js/config/api.config.js"></script>
+  <script src="../../js/utils/storage.js"></script>
+  <script src="../../js/utils/http.client.js"></script>
+  <script src="../../js/services/auth.service.js"></script>
+  <script src="../../js/services/product.service.js"></script>
+
+    <script>
+      let products = [];
+      let currentSort = 'createdAt';
+
+      // Khởi tạo
+      document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        setupEventListeners();
+        loadHeaderFooter();
+      });
+
+      // Load products từ API
+      async function loadProducts() {
+        try {
+          showLoading(true);
+
+          const data = await window.ProductService.getList({
+            page: 1,
+            limit: 50,
+            sortBy: currentSort
+          });
+
+          products = data.data || [];
+          renderProductCarousel(products);
+
+        } catch (error) {
+          console.error('Load products error:', error);
+          window.Toast.error(error.message || 'Không thể tải sản phẩm');
+          showEmptyState();
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      // Render products trong carousel (2 hàng x 5 cột)
+      function renderProductCarousel(productList) {
+        const carouselInner = document.getElementById('productCarouselInner');
+        
+        if (!productList || productList.length === 0) {
+          showEmptyState();
+          return;
+        }
+
+        const itemsPerSlide = 10; // 2 hàng x 5 cột
+        const slides = [];
+        
+        for (let i = 0; i < productList.length; i += itemsPerSlide) {
+          slides.push(productList.slice(i, i + itemsPerSlide));
+        }
+
+        carouselInner.innerHTML = slides.map((slideProducts, slideIndex) => `
+          <div class="carousel-item ${slideIndex === 0 ? 'active' : ''}">
+            <div class="row row-cols-2 row-cols-md-5 g-3">
+              ${slideProducts.map(product => renderProductCard(product)).join('')}
+            </div>
+          </div>
+        `).join('');
+
+        // Show/hide navigation buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (slides.length > 1) {
+          prevBtn.style.display = 'flex';
+          nextBtn.style.display = 'flex';
+        } else {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
+
+        document.getElementById('productGridCarousel').style.display = 'block';
+        document.getElementById('emptyState').style.display = 'none';
+
+        // Setup event listeners
+        setupProductActions();
+      }
+
+      // Render single product card
+      function renderProductCard(product) {
+        const image = product.images?.[0]?.url || 'https://via.placeholder.com/300';
+        const price = formatPrice(product.price || 0);
+        const hasDiscount = product.discount > 0;
+        const discountPrice = hasDiscount ? formatPrice(product.price * (1 - product.discount / 100)) : null;
+
+        return `
+          <div class="col">
+            <div class="modern-product-card">
+              <div class="hover-actions">
+                <button
+                  type="button"
+                  class="wishlist-btn"
+                  title="Yêu thích"
+                  data-product-id="${product._id}"
+                >
+                  <i class="bi bi-heart"></i>
+                </button>
+              </div>
+              <div class="product-image-container">
+                <a href="/Product/show/${product._id}">
+                  <img
+                    src="${image}"
+                    alt="${product.name}"
+                    onerror="this.src='https://via.placeholder.com/300'"
+                  />
+                </a>
+                ${hasDiscount ? `<div class="sale-badge">Sale ${product.discount}%</div>` : ''}
+              </div>
+              <div class="product-content">
+                <div class="product-name">
+                  <a href="/Product/show/${product._id}">${product.name}</a>
+                </div>
+                <div class="product-price">
+                  ${hasDiscount ? `<span class="old-price">${price}</span>` : ''}
+                  <span class="current-price">${hasDiscount ? discountPrice : price}</span>
+                </div>
+                <div class="product-rating">
+                  <div class="stars">
+                    ${renderStars(product.rating || 4)}
+                  </div>
+                  <span class="review-count">(${product.reviewCount || 0})</span>
+                </div>
+              </div>
+              <button class="cart-btn quick-add-btn" data-product-id="${product._id}">
+                <i class="bi bi-bag fs-4"></i>
+              </button>
+              ${renderAdminActions(product._id)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Render stars
+      function renderStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+          stars += `<span class="star ${i <= rating ? '' : 'empty'}">★</span>`;
+        }
+        return stars;
+      }
+
+      // Render admin actions (nếu là admin)
+      function renderAdminActions(productId) {
+        // Check if user is admin
+        const user = window.Storage?.getUser?.();
+        if (!user || user.role !== 'admin') return '';
+
+        return `
+          <div class="admin-actions">
+            <a href="/Product/edit/${productId}" class="admin-btn">
+              <i class="fas fa-edit me-1"></i> Sửa
+            </a>
+            <button class="admin-btn delete btn-delete-product" data-id="${productId}">
+              <i class="fas fa-trash me-1"></i> Xóa
             </button>
           </div>
-          <div class="product-content">
-            <div class="product-name">
-              <a href="/Product/show/2">Cam hữu cơ</a>
-            </div>
-            <div class="product-price">
-              <span class="current-price">36,000đ</span>
-            </div>
-            <div class="product-rating">
-              <div class="stars">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star empty">★</span>
-              </div>
-              <span class="review-count">(120)</span>
-            </div>
-          </div>
-          <button class="cart-btn" onclick="addToCart(2)">
-            <i class="bi bi-bag fs-4"></i>
-          </button>
-        </div>
-      </div>
-      <!-- Sản phẩm liên quan mẫu 2 -->
-      <div class="col">
-        <div class="modern-product-card">
-          <div class="product-image-container">
-            <img src="/images/product3.jpg" alt="Dưa hấu hữu cơ" />
-            <button class="wishlist-btn" onclick="toggleWishlist(3, this)">
-              <i class="far fa-heart"></i>
-            </button>
-          </div>
-          <div class="product-content">
-            <div class="product-name">
-              <a href="/Product/show/3">Dưa hấu hữu cơ</a>
-            </div>
-            <div class="product-price">
-              <span class="current-price">50,000đ</span>
-            </div>
-            <div class="product-rating">
-              <div class="stars">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star empty">★</span>
-                <span class="star empty">★</span>
-              </div>
-              <span class="review-count">(80)</span>
-            </div>
-          </div>
-          <button class="cart-btn" onclick="addToCart(3)">
-            <i class="bi bi-bag fs-4"></i>
-          </button>
-        </div>
-      </div>
-      <!-- Thêm sản phẩm liên quan khác nếu muốn -->
-    </div>
-  </div>
-</div>
-<div id="footer"></div>
-<script>
-  function changeQty(delta) {
-    var qty = document.getElementById('qty');
-    var val = parseInt(qty.value) + delta;
-    if (val < 1) val = 1;
-    qty.value = val;
-  }
+        `;
+      }
 
-  function addToCart(productId) {
-    alert('Thêm sản phẩm ' + productId + ' vào giỏ hàng!');
-    // Sau này gọi API thêm vào giỏ hàng
-  }
+      // Setup product actions
+      function setupProductActions() {
+        // Quick add to cart
+        document.querySelectorAll('.quick-add-btn').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productId = this.dataset.productId;
+            await addToCart(productId);
+          });
+        });
 
-  function toggleWishlist(productId, btn) {
-    const icon = btn.querySelector('i');
-    icon.classList.toggle('bi-heart');
-    icon.classList.toggle('bi-heart-fill');
-    btn.classList.toggle('active');
-    // Sau này gọi API wishlist
-  }
+        // Wishlist
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(this);
+          });
+        });
 
-  // Load header và footer
-  fetch("/src/header.html")
-    .then((res) => res.text())
-    .then((data) => {
-      document.getElementById("header").innerHTML = data;
-    });
+        // Delete product (admin only)
+        document.querySelectorAll('.btn-delete-product').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const productId = this.dataset.id;
+            await deleteProduct(productId);
+          });
+        });
+      }
 
-  fetch("/src/footer.html")
-    .then((res) => res.text())
-    .then((html) => (document.getElementById("footer").innerHTML = html));
+      // Add to cart
+      async function addToCart(productId) {
+        try {
+          await window.CartService.add({
+            productId,
+            quantity: 1
+          });
+          window.Toast.success('Đã thêm vào giỏ hàng!');
+        } catch (error) {
+          console.error('Add to cart error:', error);
+          window.Toast.error(error.message || 'Không thể thêm vào giỏ hàng');
+        }
+      }
 
-  // Fancybox
-  Fancybox.bind("[data-fancybox='gallery']", {
-    Toolbar: {
-      display: [
-        "zoom",
-        "slideshow",
-        "fullscreen",
-        "download",
-        "thumbs",
-        "close",
-      ]
-    },
-    Thumbs: {
-      autoStart: true,
-    },
-    animated: true,
-  });
-</script>
-<style>
-  .product-detail-main .main-img-box {
-    border: 1.5px solid #eee;
-    border-radius: 12px;
-    background: #fff;
-    width: 100%;
-    max-width: 340px;
-    height: 340px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-  }
+      // Toggle wishlist
+      function toggleWishlist(btn) {
+        const icon = btn.querySelector('i');
+        icon.classList.toggle('bi-heart');
+        icon.classList.toggle('bi-heart-fill');
+        btn.classList.toggle('active');
+        
+        if (btn.classList.contains('active')) {
+          window.Toast.success('Đã thêm vào yêu thích');
+        } else {
+          window.Toast.info('Đã xóa khỏi yêu thích');
+        }
+      }
 
-  .product-detail-main .main-img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-  }
+      // Delete product (admin)
+      async function deleteProduct(productId) {
+        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
 
-  @media (max-width: 991px) {
-    .product-detail-main .main-img-box {
-      max-width: 100%;
-      height: 220px;
-    }
-  }
+        try {
+          await window.ProductService.delete(productId);
+          window.Toast.success('Đã xóa sản phẩm');
+          loadProducts();
+        } catch (error) {
+          window.Toast.error(error.message || 'Không thể xóa sản phẩm');
+        }
+      }
 
-  .related-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
+      // Setup event listeners
+      function setupEventListeners() {
+        // Sort filter
+        document.getElementById('sortFilter')?.addEventListener('change', (e) => {
+          currentSort = e.target.value;
+          loadProducts();
+        });
+      }
 
-  .related-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+      // Helper functions
+      function showLoading(show) {
+        document.getElementById('loadingOverlay').style.display = show ? 'block' : 'none';
+        document.getElementById('productGridCarousel').style.display = show ? 'none' : 'block';
+      }
 
-  .related-cart-btn {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-  }
+      function showEmptyState() {
+        document.getElementById('productGridCarousel').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
 
-  .related-cart-btn:hover {
-    background: #e2e6ea;
-  }
+      function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', {
+          style: 'currency',
+          currency: 'VND'
+        }).format(price);
+      }
 
-</style>
+      function loadHeaderFooter() {
+        fetch("/src/header.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("header").innerHTML = data;
+          });
 
+        fetch("/src/banner.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("banner").innerHTML = data;
+          });
+
+        fetch("/src/footer.html")
+          .then((res) => res.text())
+          .then((data) => {
+            document.getElementById("footer").innerHTML = data;
+          });
+      }
+
+      // Back to top
+      const backToTopBtn = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 100) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+    
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </body>
+</html>
